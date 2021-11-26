@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Defaults
-[[ -z $SHIC_HOST ]] && SHIC_HOST="irc.freenode.net"
+[[ -z $SHIC_HOST ]] && SHIC_HOST="irc.libera.chat"
 [[ -z $SHIC_PORT ]] && SHIC_PORT=6667
 [[ -z $SHIC_NICK ]] && SHIC_NICK="$USER"
 [[ -z $SHIC_PASS ]] && SHIC_PASS=""
