@@ -45,6 +45,22 @@ function _output() {
     printf "$_prefix%s\e[0m\n" "$*"
 }
 
+function _tts() {
+    if [ "$(command -v pico2wave)" ]; then
+        TMPWAV=/tmp/shic.wav
+        pico2wave -l fr-FR -w "$TMPWAV" "$1" && aplay -q "$TMPWAV"
+    elif [ "$(command -v espeak)" ]; then
+        espeak -v fr "$1"
+    else
+        _output "ERROR: No text-to-speech software found"
+        _output "ERROR: We tried to use pico2wave and espeak"
+    fi
+}
+
+function _speak() {
+    _tts "$1 dit $2"
+}
+
 # Handle user input
 function _input() {
     local line="$@"
@@ -103,7 +119,8 @@ exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || exit 1
             "PRIVMSG")
                 _ch="${_line%% :*}"
                 _ch="${_ch#* }"
-                _output "<$_user@$_ch> $_txt" ;;
+                _output "<$_user@$_ch> $_txt"
+                _speak "$_user" "$_txt" ;;
             *)
                 _output "$_source >< $_line" ;;
         esac
